@@ -10,7 +10,7 @@ type Deck struct {
 
 const (
 	JokerA = 52
-	JokerB = 52
+	JokerB = 53
 )
 
 func NewDeck(key string) Deck {
