@@ -52,8 +52,28 @@ func doDeckMove(d Deck) Deck {
 	return d
 }
 
+func isJoker(c uint8) bool {
+	return (c == JokerA || c == JokerB)
+}
+
+// moves the specified joker one card down.
+// treats the deck as a loop (the last card is the first card).
 func moveJoker(d Deck, j uint8) Deck {
-	//TODO
+	// get index of joker
+	i := 0
+	for {
+		if d.cards[i] == j {
+			break
+		}
+		i++
+	}
+
+	if i+1 < len(d.cards) {
+		d.cards[i], d.cards[i+1] = d.cards[i+1], d.cards[i]
+	} else {
+		d.cards = append(d.cards[i:], d.cards[:i]...)
+		d = moveJoker(d, j)
+	}
 	return d
 }
 
