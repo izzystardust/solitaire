@@ -51,6 +51,16 @@ func TestMoveJoker(t *testing.T) {
 	}
 }
 
+func TestTripleCut(t *testing.T) {
+	var d Deck
+	d.cards = []uint8{2, 4, 6, JokerB, 5, 8, 7, 1, JokerA, 3, 9}
+	expect := []uint8{3, 9, JokerB, 5, 8, 7, 1, JokerA, 3, 9}
+	d = tripleCut(d)
+	if !slicesEqual(d.cards, expect) {
+		t.Error("Got ", d)
+	}
+}
+
 func TestCountedCut(t *testing.T) {
 	var d Deck
 	d.cards = createCardList(54)
