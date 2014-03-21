@@ -1,3 +1,6 @@
+/*
+Package solitaire implements Bruce Schneier's Solitaire cipher, as seen in Cryptonomicon.
+*/
 package solitaire
 
 import (
@@ -13,6 +16,8 @@ const (
 	JokerB = 53
 )
 
+// NewDeck creates an initialized deck keyed by the string key..
+// The empty string, "", creates an ordered deck.
 func NewDeck(key string) Deck {
 	var d Deck
 	key = strings.ToUpper(key)
@@ -27,12 +32,18 @@ func NewDeck(key string) Deck {
 	return d
 }
 
-func Encrypt(plaintext string, deck Deck) (string, error) {
-	return "", nil
+// Encrypt does what it says on the tin.
+// Returns the encrypted string.
+func Encrypt(plaintext string, deck Deck) string {
+	//TODO
+	return ""
 }
 
-func Decrypt(ciphertext string, deck Deck) (string, error) {
-	return "", nil
+// Decrypt does what is says on the tin.
+// Returns the decrypted string.
+func Decrypt(ciphertext string, deck Deck) string {
+	//TODO
+	return ""
 }
 
 func countedCut(d Deck, key uint8) Deck {
@@ -78,6 +89,28 @@ func moveJoker(d Deck, j uint8) Deck {
 }
 
 func tripleCut(d Deck) Deck {
-	//TODO
+	firstJoker := 0
+	secondJoker := 0
+	for {
+		if isJoker(d.cards[firstJoker]) {
+			break
+		}
+		firstJoker++
+	}
+
+	secondJoker = firstJoker + 1
+	for {
+		if isJoker(d.cards[secondJoker]) {
+			break
+		}
+		secondJoker++
+	}
+	first := d.cards[:firstJoker]
+	middle := d.cards[firstJoker:secondJoker]
+	last := d.cards[secondJoker:]
+	d.cards = append(last, middle...)
+	d.cards = append(d.cards, first...)
+
+
 	return d
 }
