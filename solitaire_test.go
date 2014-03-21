@@ -1,18 +1,23 @@
 package solitaire
 
 import (
-	"fmt"
 	"testing"
 )
 
 func TestNewDeck(t *testing.T) {
-	d := NewDeck()
-	fmt.Println(d)
+	d := NewDeck("")
+	for i := range d.cards {
+		if i > 0 {
+			if d.cards[i] != d.cards[i-1]+1 {
+				t.Error("Expected ordered deck, got", d)
+			}
+		}
+	}
 }
 
 func TestEncrypt(t *testing.T) {
 	pt := "hello, world"
-	var deck []int
+	var deck Deck
 	var ct string
 	ct, err := Encrypt(pt, deck)
 	if err != nil {
