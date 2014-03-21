@@ -4,28 +4,29 @@ import (
 	"strings"
 )
 
-type Deck [54]int
+type Deck struct {
+	cards []uint8
+}
 
 func NewDeck(key string) Deck {
 	var d Deck
 	key = strings.ToUpper(key)
-	for i := 0; i < 54; i++ {
-		d[i] = i
+
+	for i := uint8(0); i < 54; i++ {
+		d.cards = append(d.cards, i)
 	}
+
 	for i := 0; i < len(key); i++ {
-		d := countedCut(d, key[i]-'A')
+		// counted cut
+		d.cards = append(d.cards[key[i]-'A':], d.cards[:key[i]-'A']...)
 	}
 	return d
 }
 
-func countedCut(deck Deck, pos int) Deck {
-	return nil
-}
-
-func Encrypt(plaintext string, deck []uint8) (string, error) {
+func Encrypt(plaintext string, deck Deck) (string, error) {
 	return "", nil
 }
 
-func Decrypt(ciphertext string, deck []uint8) (string, error) {
+func Decrypt(ciphertext string, deck Deck) (string, error) {
 	return "", nil
 }
