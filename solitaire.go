@@ -89,25 +89,27 @@ func moveJoker(d Deck, j uint8) Deck {
 }
 
 func tripleCut(d Deck) Deck {
-	firstJoker := 0
-	secondJoker := 0
+	var ji1, ji2 int
+	var j1, j2 uint8
 	for {
-		if isJoker(d.cards[firstJoker]) {
+		if isJoker(d.cards[ji1]) {
+			j1 = d.cards[ji1]
 			break
 		}
-		firstJoker++
+		ji1++
 	}
 
-	secondJoker = firstJoker + 1
+	ji2 = ji1 + 1
 	for {
-		if isJoker(d.cards[secondJoker]) {
+		if isJoker(d.cards[ji2]) {
+			j2 = d.cards[ji2]
 			break
 		}
-		secondJoker++
+		ji2++
 	}
-	first := d.cards[:firstJoker]
-	middle := d.cards[firstJoker:secondJoker]
-	last := d.cards[secondJoker:]
+	first := append([]uint8{j2}, d.cards[:ji1]...)
+	middle := d.cards[ji1 + 1:ji2]
+	last := append(d.cards[ji2+1:], j1)
 	d.cards = append(last, middle...)
 	d.cards = append(d.cards, first...)
 
