@@ -6,11 +6,11 @@ import (
 
 func createCardList(size int) []uint8 {
 	var d []uint8
-	for i:= uint8(0); i < uint8(size)-2; i++ {
+	for i := uint8(0); i < uint8(size)-2; i++ {
 		d = append(d, i)
 	}
-	d = append(d, JokerA)
-	d = append(d, JokerB)
+	d = append(d, jokerA)
+	d = append(d, jokerB)
 	return d
 }
 
@@ -19,7 +19,7 @@ func slicesEqual(a []uint8, b []uint8) bool {
 		return false
 	}
 
-	for i := range(a) {
+	for i := range a {
 		if a[i] != b[i] {
 			return false
 		}
@@ -29,9 +29,9 @@ func slicesEqual(a []uint8, b []uint8) bool {
 
 func TestNewDeck(t *testing.T) {
 	d := NewDeck("")
-	for i := range d.cards {
+	for i := range d {
 		if i > 0 {
-			if d.cards[i] != d.cards[i-1]+1 {
+			if d[i] != d[i-1]+1 {
 				t.Error("Expected ordered deck, got", d)
 			}
 		}
@@ -40,45 +40,45 @@ func TestNewDeck(t *testing.T) {
 
 func TestMoveJoker(t *testing.T) {
 	var d Deck
-	d.cards = []uint8{1,2,3,4,JokerA, JokerB}
-	d = moveJoker(d, JokerA)
-	if !slicesEqual(d.cards ,[]uint8{1,2,3,4,JokerB, JokerA}) {
+	d = []uint8{1, 2, 3, 4, jokerA, jokerB}
+	d = moveJoker(d, jokerA)
+	if !slicesEqual(d, []uint8{1, 2, 3, 4, jokerB, jokerA}) {
 		t.Error("Expected {[1, 2, 3, 4, 53, 52]}, got ", d)
 	}
-	d = moveJoker(d, JokerA)
-	if !slicesEqual(d.cards, []uint8{1, JokerA, 2, 3, 4, JokerB}) {
+	d = moveJoker(d, jokerA)
+	if !slicesEqual(d, []uint8{1, jokerA, 2, 3, 4, jokerB}) {
 		t.Error("Expected {[1, 52, 2, 3, 4, 53]}, got ", d)
 	}
 }
 
 func TestTripleCut(t *testing.T) {
 	var d Deck
-	d.cards = []uint8{2, 4, 6, JokerB, 5, 8, 7, 1, JokerA, 3, 9}
-	expect := []uint8{3, 9, JokerB, 5, 8, 7, 1, JokerA, 3, 9}
+	d = []uint8{2, 4, 6, jokerB, 5, 8, 7, 1, jokerA, 3, 9}
+	expect := []uint8{3, 9, jokerB, 5, 8, 7, 1, jokerA, 3, 9}
 	d = tripleCut(d)
-	if !slicesEqual(d.cards, expect) {
+	if !slicesEqual(d, expect) {
 		t.Error("Got ", d)
 	}
 }
 
 func TestCountedCut(t *testing.T) {
 	var d Deck
-	d.cards = createCardList(54)
+	d = createCardList(54)
 	d = countedCut(d, 'A')
 	//fmt.Println(d)
 	//fmt.Println(countedCut(d, 'Z'))
 }
 
 func TestEncrypt(t *testing.T) {
-//	pt := "hello, world"
-//	var deck Deck
-//	var ct string
-//	ct, err := Encrypt(pt, deck)
-//	if err != nil {
-//		t.Error("Unexpected error: ", err)
-//	} else if ct != "hello, world" {
-//		t.Error("Got ", ct)
-//	}
+	//	pt := "hello, world"
+	//	var deck Deck
+	//	var ct string
+	//	ct, err := Encrypt(pt, deck)
+	//	if err != nil {
+	//		t.Error("Unexpected error: ", err)
+	//	} else if ct != "hello, world" {
+	//		t.Error("Got ", ct)
+	//	}
 }
 
 func TestDecrypt(t *testing.T) {

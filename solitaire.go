@@ -4,16 +4,16 @@ Package solitaire implements Bruce Schneier's Solitaire cipher, as seen in Crypt
 package solitaire
 
 import (
+	"fmt"
 	"strings"
 )
 
-type Deck struct {
-	cards []uint8
-}
+// A Deck is a deck of cards
+type Deck []uint8
 
 const (
-	JokerA = 52
-	JokerB = 53
+	jokerA = 52
+	jokerB = 53
 )
 
 // NewDeck creates an initialized deck keyed by the string key..
@@ -23,7 +23,7 @@ func NewDeck(key string) Deck {
 	key = strings.ToUpper(key)
 
 	for i := uint8(0); i < 54; i++ {
-		d.cards = append(d.cards, i)
+		d = append(d, i)
 	}
 
 	for i := 0; i < len(key); i++ {
@@ -47,24 +47,27 @@ func Decrypt(ciphertext string, deck Deck) string {
 }
 
 func countedCut(d Deck, key uint8) Deck {
+	if key == 53 || key == 'A'+53 {
+		return d
+	}
 	if key >= 'A' {
-		d.cards = append(d.cards[key-'A'+1:], d.cards[:key-'A'+1]...)
+		d = append(d[key-'A'+1:], d[:key-'A'+1]...)
 	} else {
-		d.cards = append(d.cards[key:], d.cards[:key]...)
+		d = append(d[key:], d[:key]...)
 	}
 	return d
 }
 
 func doDeckMove(d Deck) Deck {
-	moveJoker(d, JokerA)
-	moveJoker(d, JokerB)
-	moveJoker(d, JokerB)
+	moveJoker(d, jokerA)
+	moveJoker(d, jokerB)
+	moveJoker(d, jokerB)
 	tripleCut(d)
 	return d
 }
 
 func isJoker(c uint8) bool {
-	return (c == JokerA || c == JokerB)
+	return (c == jokerA || c == jokerB)
 }
 
 // moves the specified joker one card down.
@@ -73,16 +76,16 @@ func moveJoker(d Deck, j uint8) Deck {
 	// get index of joker
 	i := 0
 	for {
-		if d.cards[i] == j {
+		if d[i] == j {
 			break
 		}
 		i++
 	}
 
-	if i+1 < len(d.cards) {
-		d.cards[i], d.cards[i+1] = d.cards[i+1], d.cards[i]
+	if i+1 < len(d) {
+		d[i], d[i+1] = d[i+1], d[i]
 	} else {
-		d.cards = append(d.cards[i:], d.cards[:i]...)
+		d = append(d[i:], d[:i]...)
 		d = moveJoker(d, j)
 	}
 	return d
@@ -91,9 +94,11 @@ func moveJoker(d Deck, j uint8) Deck {
 func tripleCut(d Deck) Deck {
 	var ji1, ji2 int
 	var j1, j2 uint8
+
+	// find jokers
 	for {
-		if isJoker(d.cards[ji1]) {
-			j1 = d.cards[ji1]
+		if isJoker(d[ji1]) {
+			j1 = d[ji1]
 			break
 		}
 		ji1++
@@ -101,18 +106,20 @@ func tripleCut(d Deck) Deck {
 
 	ji2 = ji1 + 1
 	for {
-		if isJoker(d.cards[ji2]) {
-			j2 = d.cards[ji2]
+		if isJoker(d[ji2]) {
+			j2 = d[ji2]
 			break
 		}
 		ji2++
 	}
-	first := append([]uint8{j2}, d.cards[:ji1]...)
-	middle := d.cards[ji1 + 1:ji2]
-	last := append(d.cards[ji2+1:], j1)
-	d.cards = append(last, middle...)
-	d.cards = append(d.cards, first...)
-
+	first := append([]uint8{j2}, d[:ji1]...)
+	fmt.Println(first)
+	middle := d[ji1+1 : ji2]
+	fmt.Println(middle)
+	last := append(d[ji2+1:], j1)
+	fmt.Println(last)
+	d = append(last, middle...)
+	d = append(d, first...)
 
 	return d
 }
