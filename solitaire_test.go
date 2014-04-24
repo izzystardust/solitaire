@@ -54,7 +54,13 @@ func TestMoveJoker(t *testing.T) {
 func TestTripleCut(t *testing.T) {
 	var d Deck
 	d = []uint8{2, 4, 6, jokerB, 5, 8, 7, 1, jokerA, 3, 9}
-	expect := []uint8{3, 9, jokerB, 5, 8, 7, 1, jokerA, 3, 9}
+	expect := []uint8{3, 9, jokerB, 5, 8, 7, 1, jokerA, 2, 4, 6}
+	d = tripleCut(d)
+	if !slicesEqual(d, expect) {
+		t.Error("Got ", d)
+	}
+	d = []uint8{jokerA, jokerB}
+	expect = []uint8{jokerA, jokerB}
 	d = tripleCut(d)
 	if !slicesEqual(d, expect) {
 		t.Error("Got ", d)
