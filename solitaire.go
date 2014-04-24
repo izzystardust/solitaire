@@ -3,10 +3,7 @@ Package solitaire implements Bruce Schneier's Solitaire cipher, as seen in Crypt
 */
 package solitaire
 
-import (
-	"fmt"
-	"strings"
-)
+import "strings"
 
 // A Deck is a deck of cards
 type Deck []uint8
@@ -112,14 +109,14 @@ func tripleCut(d Deck) Deck {
 		}
 		ji2++
 	}
-	first := append([]uint8{j2}, d[:ji1]...)
-	fmt.Println(first)
-	middle := d[ji1+1 : ji2]
-	fmt.Println(middle)
-	last := append(d[ji2+1:], j1)
-	fmt.Println(last)
-	d = append(last, middle...)
-	d = append(d, first...)
 
+	begin := d[:ji1]
+	middle := d[ji1+1 : ji2]
+	end := d[ji2+1:]
+
+	d = append(end, j1)
+	d = append(d, middle...)
+	d = append(d, j2)
+	d = append(d, begin...)
 	return d
 }
